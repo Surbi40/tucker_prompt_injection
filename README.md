@@ -104,6 +104,13 @@ Recommended workflow:
 - Any dataset used will follow its applicable license and usage terms.
 - Final results, figures, and paper drafts will be updated as the project progresses.
 
+
+## Important SOTA References Link
+https://genai.owasp.org/llmrisk/llm01-prompt-injection/
+https://galileo.ai/blog/ai-prompt-injection-attacks-detection-and-prevention
+https://www.nature.com/articles/s41598-026-43883-0
+https://www.microsoft.com/en-us/msrc/blog/2025/07/how-microsoft-defends-against-indirect-prompt-injection-attacks
+https://www.preprints.org/manuscript/202510.0418/v1
 ## Authors
 
 - Surbi Karki
