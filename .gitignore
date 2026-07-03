@@ -35,3 +35,16 @@ Thumbs.db
 venv/
 env/
 .venv/
+
+# Local activation script
+ActivateWithHF.ps1
+
+# Hugging Face / datasets cache
+datasets/
+huggingface/
+*.arrow
+*.json
+*.lock
+
+# Logs
+*.log
