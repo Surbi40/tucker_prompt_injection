@@ -1,6 +1,7 @@
 import os
 import json
 import random
+import pickle
 from pathlib import Path
 
 from groq import Groq
@@ -9,9 +10,11 @@ import faiss
 
 from src.utils.config import load_config, set_seed, get_project_root
 
+# Load config and set reproducibility
 config = load_config()
 set_seed(config["random_seed"])
 
+# Initialize Groq client and embedding model
 client = Groq(api_key=os.environ["GROQ_API_KEY"])
 embedder = SentenceTransformer(config["embedding_model"])
 
@@ -25,10 +28,10 @@ def load_injection_strings():
 
 
 def load_retrieval_index():
-    """Loads prebuilt FAISS index + chunk texts from datasets/rag_context/."""
-    index = faiss.read_index(str(ROOT / "datasets" / "rag_context" / "index.faiss"))
-    with open(ROOT / "datasets" / "rag_context" / "chunks.json") as f:
-        chunks = json.load(f)
+    """Loads prebuilt FAISS index + chunk texts from datasets/wikipedia/."""
+    index = faiss.read_index(str(ROOT / "datasets" / "wikipedia" / "index.faiss"))
+    with open(ROOT / "datasets" / "wikipedia" / "chunks.pkl", "rb") as f:
+        chunks = pickle.load(f)
     return index, chunks
 
 
