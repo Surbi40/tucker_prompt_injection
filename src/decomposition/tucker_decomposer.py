@@ -13,6 +13,8 @@ def decompose_tensor(tensor, rank):
     """
     core, factors =tucker(tensor, rank = rank, init="svd",random_state=42)
     return core, factors
+#Alias
+decompose_tucker = decompose_tensor
 
 def extract_tucker_features(core, factors):
     """ flattens core tensor+ all factor matrices into one feature vector"""
