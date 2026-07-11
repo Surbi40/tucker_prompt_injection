@@ -2,6 +2,10 @@ import json
 import random
 import numpy as np
 from pathlib import Path
+from dotenv import load_dotenv
+
+_ROOT = Path(__file__).resolve().parents[2]
+load_dotenv(_ROOT / ".env")  # loads GROQ_API_KEY
 
 
 def get_project_root():
@@ -9,7 +13,7 @@ def get_project_root():
     Returns the project root directory (tucker_prompt_injection/),
     assuming this file lives at src/utils/config.py.
     """
-    return Path(__file__).resolve().parents[2]
+    return _ROOT
 
 
 def load_config():

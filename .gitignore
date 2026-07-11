@@ -8,14 +8,11 @@ __pycache__/
 .ipynb_checkpoints/
 *.ipynb
 
-
-# Models 
+# Models
 models/
 
 # Logs
 logs/
-
-
 
 # API keys
 .env
@@ -33,7 +30,6 @@ env/
 
 # Local activation script
 ActivateWithHF.ps1
-
 
 *.lock
 
