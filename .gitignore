@@ -8,9 +8,6 @@ __pycache__/
 .ipynb_checkpoints/
 *.ipynb
 
-# Data 
-data/processed/
-datasets/
 
 # Models 
 models/
@@ -18,9 +15,7 @@ models/
 # Logs
 logs/
 
-# Results 
-results/
-experiments/runs/
+
 
 # API keys
 .env
@@ -39,11 +34,7 @@ env/
 # Local activation script
 ActivateWithHF.ps1
 
-# Hugging Face / datasets cache
-datasets/
-huggingface/
-*.arrow
-*.json
+
 *.lock
 
 # Logs
