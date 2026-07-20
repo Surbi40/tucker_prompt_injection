@@ -1,14 +1,3 @@
-{
-  "ds1": {
-    "dataset": "DS1 (deepset)",
-    "n": 662,
-    "accuracy": 0.7613293051359517,
-    "f1": 0.5797872340425532
-  },
-  "ds2": {
-    "dataset": "DS2 (wambosec)",
-    "n": 1200,
-    "accuracy": 0.9258333333333333,
-    "f1": 0.934220251293422
-  }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:6fdf8f9a79bc5355ccb9a988a57db27bedbaea0f9d633ad67f65c04ec146e098
+size 270

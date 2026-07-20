@@ -1,7 +1,3 @@
-{
-  "rows": 15112,
-  "benign": 8343,
-  "injection": 6769,
-  "duplicates_removed": 178,
-  "ratio": "1.23:1"
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:bd2ba54ca2c52ade09870c50f4dbb03bca96f40a83ae1caef5551faa16750671
+size 114

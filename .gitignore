@@ -35,3 +35,5 @@ ActivateWithHF.ps1
 
 # Logs
 *.log
+
+datasets/prompt_injection/ds4_geekyrakshit_full.json

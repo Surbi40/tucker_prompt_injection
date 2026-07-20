@@ -1,14 +1,3 @@
-{
-  "window_size": 5,
-  "tucker_rank": [10, 10, 3],
-  "cp_rank": 10,
-  "max_vocab_size": 500,
-  "num_samples": 200,
-  "clean_samples": 100,
-  "injected_samples": 100,
-  "n_folds": 5,
-  "random_seed": 42,
-  "llm_model": "llama-3.1-8b-instant",
-  "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
-  "num_wikipedia_chunks": 1000
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:db5a8223f24c0497ff6643f8c1c089f00154e998031028d855d29d07503c1375
+size 351
