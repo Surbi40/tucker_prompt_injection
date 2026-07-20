@@ -1,0 +1,7 @@
+{
+  "rows": 15112,
+  "benign": 8343,
+  "injection": 6769,
+  "duplicates_removed": 178,
+  "ratio": "1.23:1"
+}
