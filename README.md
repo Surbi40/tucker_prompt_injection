@@ -1,116 +1,95 @@
-# Tucker Prompt Injection Detection in RAG Systems
+# Zero‑Shot Structural Detection of Prompt Injection via Tensor Decomposition
 
 This repository contains the research code, datasets, experiment scripts, and paper drafts for our study on detecting adversarial inputs in Retrieval-Augmented Generation (RAG) systems using Tucker decomposition.
 
-## Project Overview
+## Problem Statement
 
-Prompt injection is a major security risk in RAG systems because malicious instructions can appear either in the user query or inside retrieved context. These attacks can alter model behavior, leak system information, or cause the model to ignore safety instructions.
+Large Language Models (LLMs) used in Retrieval‑Augmented Generation (RAG) applications are vulnerable to prompt injection attacks, where adversarial instructions hidden in queries, documents, or retrieved context bypass safety rules and cause harmful or unintended outputs.
+A deployment team faces a critical challenge: they have no labeled examples of prompt injections from their own traffic. Without labeled attack data, fine‑tuning or supervised defenses are infeasible.
 
-This project investigates whether Tucker decomposition applied to a custom co-occurrence tensor can capture latent multilinear structure that helps distinguish benign inputs from adversarial ones. We focus on RAG-style security settings where malicious content may be hidden in retrieved passages.
+## Research Gap
+Existing defenses often fail under label scarcity:
 
-## Research Objectives
+-Gradient‑based fine‑tuning → requires labeled attack data.
+-Model‑specific patches → brittle and collapse under unseen attacks.
+-Generic pretrained classifiers → transfer poorly to new domains.
+None provide a lightweight, generalizable, zero‑shot detection method that works without retraining, labeled attack data, or deep access to model internals.
 
-- Build a clean dataset for benign QA, prompt injection, and RAG-style context injection.
-- Construct a co-occurrence tensor representation for RAG inputs.
-- Apply Tucker decomposition to extract latent multilinear structure.
-- Compare Tucker-based features with classical baselines and prior tensor-based approaches.
-- Evaluate detection performance on both direct and indirect prompt injection settings.
+##Proposed Solution
+We introduce a structural, zero‑shot anomaly detection framework based on co‑occurrence tensor decomposition (Tucker Decomposition).
+Unlike semantic drift methods (e.g., ZEDD) that measure meaning shifts, our approach models the structural regularities of benign prompts and flags anomalies when injected prompts deviate from this learned distribution.
+**Key Features**
+-Zero‑shot / zero‑label → trained only on benign prompts, we don't need examples of attacks or special labels.
+-Structure‑aware → detects anomalies in word/token patterns, not just meaning. Flag the unusual structure.
+-Model‑agnostic → works with any LLM without retraining.
+-Benign‑only calibration → thresholds set using normal prompts only where attack data isn't available.
+-Robust to obfuscation → catches encoding tricks, formatting anomalies.
+-Lightweight & efficient → no GPUs or heavy training required.
+-Domain‑adaptive → learns the normal style of prompts in your environment.
+
 
 ## Novelty
 
-Our key novelty is the use of a **custom co-occurrence tensor** for adversarial input detection in RAG systems. Since no off-the-shelf library directly provides the exact tensor construction needed for this setting, we implement the tensor-building step from scratch to preserve the intended multilinear structure.
+Our contribution is structural, **zero‑shot anomaly detection** using co‑occurrence tensor decomposition:
+-Custom co‑occurrence tensor: We build a special data structure that shows how words and context appear together. This isn’t available in standard libraries, so we designed it ourselves.
+-Tucker decomposition : We use a mathematical technique to break down the tensor and uncover hidden patterns that represent normal, safe prompts.
+-Structural vs semantic focus: Unlike ZEDD, which looks at changes in meaning, our method looks at unusual shapes and patterns in text — like odd token sequences, strange formatting, or hidden encodings.
+-Zero‑shot calibration: We only train on safe prompts and set thresholds using them. This matches real‑world situations where attack examples aren’t available.
+-Lightweight & efficient: Our method doesn’t need GPUs or heavy retraining. It’s fast, practical, and easy to deploy.
 
-We then apply **Tucker decomposition**, optimized with **HOOI**, to recover latent multiway interactions from the tensor. TensorLy is used as the decomposition backend, while our contribution focuses on the task-specific tensor construction and its application to RAG security.
+## Expected Results
 
-## Repository Structure
+-Zero‑shot detection (no retraining).
+-High accuracy.
+-Low false positives .
+-Generalizable across multiple LLMs (Llama, Qwen, Mistral).
 
-- `data/` - raw, processed, and split datasets.
-- `datasets/` - dataset-specific files, metadata, and prepared samples.
-- `src/` - reusable source code for preprocessing, tensor construction, decomposition, modeling, and evaluation.
-- `baselines/` - baseline methods such as regex, TF-IDF + Logistic Regression, Random Forest, SVM, and transformer baselines.
-- `sota/` - state-of-the-art papers, summaries, and comparison notes.
-- `experiments/` - experiment runs, ablations, and result logs.
-- `paper/` - LaTeX, Word, and PDF versions of the manuscript.
-- `drafts/` - abstract drafts, section drafts, and revisions.
-- `figures/` - plots, diagrams, and architecture figures.
-- `tables/` - dataset summaries, metric tables, and comparison tables.
-- `results/` - final predictions, metrics, and evaluation outputs.
-- `references/` - bibliography files and reading notes.
-- `scripts/` - helper scripts for data preparation, training, and evaluation.
-- `tests/` - unit tests and sanity checks.
-- `configs/` - configuration files for datasets, models, and experiments.
-- `logs/` - training and evaluation logs.
-- `docs/` - project notes, methodology notes, and planning documents.
-- `models/` - saved models, vectorizers, and tensor artifacts.
+## Experimental Design
+-Prong A: Direct Injection — zero‑shot detection of adversarial queries.
 
-## Data Sources
+-Prong B: Indirect Injection — detection of malicious content hidden in retrieved context.
 
-Planned datasets include:
-- TriviaQA for benign QA and RAG-style query evaluation.
-- Prompt injection datasets for direct adversarial input detection.
-- RAG-context injection data for indirect prompt injection experiments.
+## Benchmarks and Datasets
 
-## Method Summary
+**Internal Benchmark**
+DS1 (deepset/prompt‑injections, Brooks & Turner 2025)
+660 prompts (399 benign, 261 injected).
+Diverse attack types: jailbreak, system leak, task override, encoding tricks.
 
-The main pipeline is:
+**External Benchmark**
+LLMail‑Inject (2026)
+51k+ aligned pairs (clean vs injected).
+5 attack categories across multiple models (Llama, Qwen, Mistral, SBERT).
+Community‑recognized dataset used by ZEDD.
 
-1. Build a co-occurrence tensor from query and retrieved context.
-2. Apply Tucker decomposition using HOOI.
-3. Extract latent factors and core tensor features.
-4. Train a downstream classifier for benign vs adversarial detection.
-5. Evaluate on direct and indirect prompt injection benchmarks.
+**Additional Benchmarks**
+-Semalith Evaluation Suite (2026) → supervised SOTA alignment.
+-AdvBench / JailbreakBench (2025–2026) → adversarial robustness testing.
 
-TensorLy is used for Tucker decomposition, but the custom tensor construction is implemented in this repository.
+## Baselines to Test Against
+1. Semantic Drift Reference
+ZEDD (2025) → prior zero‑shot anomaly detection baseline.
 
-## Planned Baselines
+2.Structural Baselines
+Char‑TF‑IDF + SVM (Brooks & Turner 2025)
+ByT5 (Google 2021)
+CANINE (Google 2021)
+ILSE (2026) → current SOTA structural encoder.
 
-- Regex-based detection.
-- TF-IDF + Logistic Regression.
-- Random Forest.
-- Support Vector Machine.
-- Transformer-based classifier.
-- Prior tensor-based adversarial detection methods.
+3.Supervised Classifiers
+Semalith v1.4 (2026) → supervised SOTA.
+Llama‑Guard‑3‑8B (2025) → large guardrail model.
+Fine‑tuned DeBERTa/RoBERTa (2025–2026) → mid‑tier supervised baselines.
 
+## Contributions
 
-## Usage
-
-Recommended workflow:
-
-1. Place raw datasets in `data/raw/`.
-2. Run preprocessing scripts from `scripts/` or `src/preprocessing/`.
-3. Generate co-occurrence tensors using the tensor construction module.
-4. Run Tucker decomposition and feature extraction.
-5. Train baselines and evaluate results.
-6. Save outputs in `results/`, `figures/`, and `tables/`.
-
-## Planned Experiments
-
-- Direct prompt injection detection.
-- Indirect prompt injection detection in retrieved context.
-- Comparison between Tucker features and classical baselines.
-- Ablation studies on tensor rank and classifier choice.
-- Robustness testing under RAG-style attack scenarios.
-
-## Expected Contributions
-
-- A custom co-occurrence tensor representation for RAG security.
-- Tucker decomposition-based adversarial detection pipeline.
-- A reproducible benchmark for prompt injection in RAG systems.
-- Comparative analysis against classical and tensor-based baselines.
-
-## Notes
-
-- This repository is for academic research only.
-- Any dataset used will follow its applicable license and usage terms.
-- Final results, figures, and paper drafts will be updated as the project progresses.
+-A reproducible benchmark for prompt injection in RAG systems.
+-Tucker decomposition‑based zero‑shot anomaly detection pipeline.
+-Comparative analysis against semantic (ZEDD), structural (ILSE, ByT5, CANINE), and supervised (Semalith,  TF‑IDF+SVM) baselines.
+-Benchmarked on DS1 (internal) and LLMail‑Inject (external) for reproducibility and scalability.
 
 
-## Important SOTA References Link
-https://genai.owasp.org/llmrisk/llm01-prompt-injection/
-https://galileo.ai/blog/ai-prompt-injection-attacks-detection-and-prevention
-https://www.nature.com/articles/s41598-026-43883-0
-https://www.microsoft.com/en-us/msrc/blog/2025/07/how-microsoft-defends-against-indirect-prompt-injection-attacks
-https://www.preprints.org/manuscript/202510.0418/v1
+
 ## Authors
 
 - Surbi Karki
