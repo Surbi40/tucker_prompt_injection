@@ -14,10 +14,7 @@ out_dir = ROOT / "datasets" / "prompt_injection"
 
 datasets = {
     "DS1": out_dir / "ds1_deepset_clean.json",
-    "DS2": out_dir / "ds2_wambosec_clean.json",
-    "DS3": out_dir / "ds3_slabs_experiment.json",
-    "DS4": out_dir / "ds4_geekyrakshit_experiment.json",
-    "Combined": out_dir / "combined_clean.json",
+    
 }
 
 def is_english(text):

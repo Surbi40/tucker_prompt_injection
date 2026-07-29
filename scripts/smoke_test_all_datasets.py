@@ -16,10 +16,7 @@ out_dir = ROOT / "datasets" / "prompt_injection"
 # Define datasets and vocab sizes (tune vocab per dataset for memory)
 datasets = {
     "DS1": (out_dir / "ds1_deepset_clean.json", 500),
-    "DS2": (out_dir / "ds2_wambosec_clean.json", 300),   # smaller vocab for memory
-    "DS3": (out_dir / "ds3_slabs_experiment.json", 500),
-    "DS4": (out_dir / "ds4_geekyrakshit_experiment.json", 500),
-    "Combined": (out_dir / "combined_clean.json", 500),
+   
 }
 
 for name, (path, vocab_size) in datasets.items():

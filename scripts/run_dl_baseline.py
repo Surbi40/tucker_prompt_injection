@@ -53,11 +53,6 @@ results["ds1"] = evaluate_zero_shot(
     "DS1 (deepset)"
 )
 
-results["ds2"] = evaluate_zero_shot(
-    ROOT / "datasets" / "prompt_injection" / "ds2_wambosec_clean.json",
-    "DS2 (wambosec)",
-    subsample_size=1200
-)
 
 out_dir = ROOT / "results"
 out_dir.mkdir(parents=True, exist_ok=True)
